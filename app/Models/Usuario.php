@@ -37,7 +37,7 @@ class Usuario extends Model
 
     public function role()
     {
-        return $this->belongsTo(Role::class, 'rol_id');
+        return $this->belongsTo(Roles::class, 'rol_id');
     }
 
     public function facturas()
