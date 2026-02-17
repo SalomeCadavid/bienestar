@@ -16,7 +16,7 @@ class RoleMiddleware
             return response()->json(['message' => 'No autenticado'], 401);
         }
 
-        if (!in_array($user->role, $roles)) {
+        if (!$user->rol || !in_array($user->rol->nombre, $roles)) {
             return response()->json(['message' => 'No autorizado'], 403);
         }
 
