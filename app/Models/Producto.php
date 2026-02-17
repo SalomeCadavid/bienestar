@@ -24,7 +24,7 @@ class Producto extends Model
 
     public function tipoProducto()
     {
-        return $this->belongsTo(TipoProducto::class, 'tipo_producto_id');
+    return $this->belongsTo(TipoProducto::class);
     }
 
     public function detalles()
