@@ -31,11 +31,23 @@ class ProductoController extends Controller
 
     public function update(Request $request, $id)
     {
-        $producto = Producto::findOrFail($id);
-        $producto->update($request->all());
+    $producto = Producto::findOrFail($id);
 
-        return $producto;
+    $request->validate([
+        'nombre' => 'sometimes|string|max:100',
+        'precio' => 'sometimes|numeric',
+        'stock' => 'sometimes|integer',
+        'tipo_producto_id' => 'sometimes|exists:tipo_productos,id'
+    ]);
+
+    $producto->update($request->all());
+
+    return response()->json([
+        'message' => 'Producto actualizado correctamente',
+        'data' => $producto
+    ]);
     }
+
 
     public function destroy($id)
     {
