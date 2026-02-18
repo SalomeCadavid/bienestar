@@ -5,21 +5,30 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
+  const [user, setUser] = useState(null);
 
   const login = async (email, password) => {
-    const response = await api.post("/login", { email, password });
-    localStorage.setItem("token", response.data.token);
-    setToken(response.data.token);
+    const res = await api.post("/login", { email, password });
+
+    localStorage.setItem("token", res.data.token);
+    setToken(res.data.token);
+    setUser(res.data.user);
+  };
+
+  const register = async (data) => {
+    await api.post("/register", data);
   };
 
   const logout = () => {
     localStorage.removeItem("token");
     setToken(null);
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ token, login, logout }}>
+    <AuthContext.Provider value={{ token, user, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
