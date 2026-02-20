@@ -3,7 +3,7 @@ import mancuerna from "../assets/mancuerna.png"; // coloca aquí tu imagen
 
 function Home() {
   return (
-    <div className="home">
+    <div className="Home">
 
       {/* NAVBAR */}
       <nav className="navbar">
