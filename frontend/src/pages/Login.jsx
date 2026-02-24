@@ -1,33 +1,50 @@
-import { useState, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import "./Login.css";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const { login } = useContext(AuthContext);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    await login(email, password);
-    alert("Login exitoso");
-  };
+  const navigate = useNavigate();
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Iniciar Sesión</h2>
-      <input 
-        type="email" 
-        placeholder="Email"
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input 
-        type="password" 
-        placeholder="Password"
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button type="submit">Ingresar</button>
-    </form>
+    <div className="login-container">
+
+      {/* HEADER */}
+      <header className="login-header">
+        <div className="logo">BT</div>
+        <div className="title">BIENESTAR TOTAL</div>
+        <div className="logo">BT</div>
+      </header>
+
+      {/* VOLVER */}
+      <div className="back-button">
+        <button onClick={() => navigate("/register")}>
+          Volver al registro
+        </button>
+      </div>
+
+      {/* CARD */}
+      <div className="login-card">
+        <h2>INICIA SESIÓN</h2>
+
+        <input type="email" placeholder="CORREO ELECTRÓNICO" />
+        <input type="password" placeholder="CONTRASEÑA" />
+
+        <div className="login-footer">
+          <span className="forgot">¿Olvidaste tu contraseña?</span>
+
+          <button className="btn-primary">
+            SIGUIENTE
+          </button>
+        </div>
+      </div>
+
+      {/* FOOTER */}
+      <footer className="footer">
+        © 2025 BIENESTAR TOTAL
+      </footer>
+
+    </div>
   );
 }
 
 export default Login;
+

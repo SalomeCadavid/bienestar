@@ -1,43 +1,60 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./Home.css";
 import mancuerna from "../assets/mancuerna.png"; // coloca aquí tu imagen
 
-function Home() {
+const Home = () => {
+  const navigate = useNavigate();
+
   return (
-    <div className="Home">
+    <div className="home-container">
 
-      {/* NAVBAR */}
-      <nav className="navbar">
+      {/* Header */}
+      <header className="home-header">
         <div className="logo">BT</div>
 
-        <ul className="nav-links">
-          <li>Tienda</li>
-          <li>Nuestros Planes</li>
-          <li>Recomendaciones</li>
-          <li>Nosotros</li>
-          <li className="btn-register">Regístrate Ahora</li>
-        </ul>
-
-        <div className="logo">BT</div>
-      </nav>
-
-      {/* HERO */}
-      <section className="hero">
-        <div className="hero-text">
-          <h1>
-            ¡TE ACOMPAÑAMOS <br />
-            EN CADA PASO <br />
-            HACIA TU MEJOR <br />
-            <span>VERSIÓN!</span>
-          </h1>
+        <div className="nav-buttons">
+          <button onClick={() => navigate("/tienda")}>TIENDA</button>
+          <button onClick={() => navigate("/recomendaciones")}>RECOMENDACIONES</button>
+          <button onClick={() => navigate("/nosotros")}>NOSOTROS</button>
+          <button 
+            className="register-btn"
+            onClick={() => navigate("/register")}
+          >
+            ¡REGÍSTRATE AHORA!
+          </button>
         </div>
 
-        <div className="hero-image">
+        <div className="logo">BT</div>
+      </header>
+
+      {/* Main Section */}
+      <main className="home-main">
+        <div className="text-section">
+          <h1>
+            ¡TE ACOMPAÑAMOS EN <br />
+            CADA PASO HACIA TÚ <br />
+            MEJOR VERSIÓN!
+          </h1>
+
+          <p>
+            ALCANZA TUS OBJETIVOS Y MEJORA TUS HÁBITOS <br />
+            CON BIENESTAR TOTAL.
+          </p>
+        </div>
+
+        <div className="image-section">
           <img src={mancuerna} alt="Mancuerna" />
         </div>
-      </section>
+      </main>
+
+      {/* Footer */}
+      <footer className="home-footer">
+        © 2025 BIENESTAR TOTAL.
+      </footer>
 
     </div>
   );
-}
+};
 
 export default Home;
