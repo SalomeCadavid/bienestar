@@ -6,13 +6,13 @@ function Login() {
 
   return (
     <div className="login-container">
-
-      {/* HEADER */}
-      <header className="login-header">
-        <div className="logo">BT</div>
-        <div className="title">BIENESTAR TOTAL</div>
-        <div className="logo">BT</div>
-      </header>
+      
+      <button
+          className="home-btn"
+          onClick={() => navigate("/")}
+        >
+          BIENESTAR TOTAL
+        </button>
 
       {/* VOLVER */}
       <div className="back-button">

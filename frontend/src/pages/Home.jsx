@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./Home.css";
 import mancuerna from "../assets/mancuerna.png"; // coloca aquí tu imagen
 
+
 const Home = () => {
   const navigate = useNavigate();
 
@@ -12,17 +13,12 @@ const Home = () => {
       {/* Header */}
       <header className="home-header">
         <div className="logo">BT</div>
-
+    
         <div className="nav-buttons">
-          <button onClick={() => navigate("/tienda")}>TIENDA</button>
+          <button className="productos-btn"onClick={() => navigate("/productos")}>TIENDA</button>
           <button onClick={() => navigate("/recomendaciones")}>RECOMENDACIONES</button>
           <button onClick={() => navigate("/nosotros")}>NOSOTROS</button>
-          <button 
-            className="register-btn"
-            onClick={() => navigate("/register")}
-          >
-            ¡REGÍSTRATE AHORA!
-          </button>
+          <button className="register-btn"onClick={() => navigate("/register")}>¡REGÍSTRATE AHORA!</button>
         </div>
 
         <div className="logo">BT</div>

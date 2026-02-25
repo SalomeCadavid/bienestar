@@ -1,7 +1,7 @@
 
 function Productos() {
   return (
-    <div className="Productos">
+    <div className="productos-btn">
       <h1>Productos</h1>
     </div>
   );

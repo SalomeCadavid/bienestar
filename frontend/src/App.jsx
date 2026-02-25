@@ -6,22 +6,21 @@ import Home from "./pages/Home.jsx";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
-import Productos from "./pages/Productos";
+import Tienda from "./pages/tienda"; // 👈 OJO mayúscula
 
 function App() {
   return (
+    
     <AuthProvider>
       <BrowserRouter>
         <Routes>
 
-          {/* HOME */}
           <Route path="/" element={<Home />} />
 
-          {/* AUTH */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/productos" element={<Tienda />} />
 
-          {/* PROTEGIDAS */}
           <Route
             path="/dashboard"
             element={
@@ -31,14 +30,7 @@ function App() {
             }
           />
 
-          <Route
-            path="/productos"
-            element={
-              <ProtectedRoute>
-                <Productos />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/tienda" element={<Tienda />} />
 
         </Routes>
       </BrowserRouter>
@@ -47,3 +39,4 @@ function App() {
 }
 
 export default App;
+
