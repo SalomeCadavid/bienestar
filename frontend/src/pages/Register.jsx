@@ -37,7 +37,7 @@ function Register() {
       }
 
       localStorage.setItem("token", data.token);
-      navigate("/login");
+      navigate("/dashboard");
 
     } catch (error) {
       console.error(error);

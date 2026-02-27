@@ -21,7 +21,7 @@ function Login() {
       await login(email, password);
 
       // Puedes redirigir según rol si quieres después
-      navigate("/home");
+      navigate("/dashboard");
 
     } catch (err) {
       setError("Correo o contraseña incorrectos");
