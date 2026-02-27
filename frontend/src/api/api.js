@@ -1,32 +1,34 @@
-const API_URL = "http://localhost:8000/api";
+import axios from "axios";
 
-export async function apiFetch(endpoint, options = {}) {
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:8000/api",
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+});
+
+// Interceptor para enviar token
+api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
 
-  const isFormData = options.body instanceof FormData;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
 
-  const res = await fetch(API_URL + endpoint, {
-    ...options,
-    credentials: "include", // importante si usas Sanctum
-    headers: {
-      ...(isFormData ? {} : { "Content-Type": "application/json" }),
-      Accept: "application/json",
-      ...(token && { Authorization: `Bearer ${token}` }),
-      ...(options.headers || {}),
-    },
-  });
+  return config;
+});
 
-  if (!res.ok) {
-    const text = await res.text();
-    console.error("API ERROR:", text);
-
-    if (res.status === 401) {
+// Interceptor para errores globales
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
       localStorage.removeItem("token");
       window.location.href = "/login";
     }
-
-    throw new Error(text || "Error en la petición");
+    return Promise.reject(error);
   }
+);
 
-  return res.json();
-}
+export default api;

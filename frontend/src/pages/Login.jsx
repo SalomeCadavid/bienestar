@@ -1,45 +1,38 @@
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { apiFetch } from "../api/api";
+import { useState, useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 import logo from "../assets/TB.png";
 
 function Login() {
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-const handleLogin = async () => {
-  setError("");
-  setLoading(true);
+  const handleLogin = async () => {
+    setError("");
+    setLoading(true);
 
-  try {
-    const data = await apiFetch("/login", {
-      method: "POST",
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
+    try {
+      await login(email, password);
 
-    localStorage.setItem("token", data.token);
+      // Puedes redirigir según rol si quieres después
+      navigate("/home");
 
-    localStorage.setItem("user", JSON.stringify(data.user));
-
-    navigate("/"); 
-  } catch (err) {
-    setError("Correo o contraseña incorrectos");
-  } finally {
-    setLoading(false);
-  }
-};
+    } catch (err) {
+      setError("Correo o contraseña incorrectos");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="login-container">
-      
+
       <header>
         <div className="login-header">
           <img src={logo} alt="BT" className="logo-bt" />
