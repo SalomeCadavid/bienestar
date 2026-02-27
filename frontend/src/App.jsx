@@ -6,7 +6,9 @@ import Home from "./pages/Home.jsx";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
-import Tienda from "./pages/tienda"; // 👈 OJO mayúscula
+import Tienda from "./pages/tienda"; 
+import CalcularIMC from "./pages/Calcularimc";
+import Planes from "./pages/Planes";
 
 function App() {
   return (
@@ -31,6 +33,10 @@ function App() {
           />
 
           <Route path="/tienda" element={<Tienda />} />
+
+          <Route path="/calcular-imc" element={<CalcularIMC />} />
+
+          <Route path="/planes" element={<Planes />} />
 
         </Routes>
       </BrowserRouter>

@@ -1,5 +1,6 @@
 import "./Register.css";
 import { useNavigate } from "react-router-dom";
+import logo from "../assets/TB.png";
 
 function Register() {
   const navigate = useNavigate();
@@ -9,9 +10,14 @@ function Register() {
 
       {/* HEADER */}
       <header className="register-header">
-        <div className="logo">BT</div>
-        <div className="title">BIENESTAR TOTAL</div>
-        <div className="logo">BT</div>
+        <img src={logo} alt="BT" className="logo-bt" />
+        <button
+          className="home-btn"
+          onClick={() => navigate("/")}
+        >
+          BIENESTAR TOTAL
+        </button>
+        <img src={logo} alt="BT" className="logo-bt" />
       </header>
 
       {/* CARD */}

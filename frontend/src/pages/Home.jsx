@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Home.css";
 import mancuerna from "../assets/mancuerna.png"; // coloca aquí tu imagen
+import logo from "../assets/TB.png";
 
 
 const Home = () => {
@@ -12,16 +13,17 @@ const Home = () => {
 
       {/* Header */}
       <header className="home-header">
-        <div className="logo">BT</div>
-    
+        <img src={logo} alt="BT" className="logo-bt" />
+
         <div className="nav-buttons">
           <button className="productos-btn"onClick={() => navigate("/productos")}>TIENDA</button>
           <button onClick={() => navigate("/recomendaciones")}>RECOMENDACIONES</button>
           <button onClick={() => navigate("/nosotros")}>NOSOTROS</button>
+          <button onClick={() => navigate("/Planes")}>NUESTROS PLANES</button>
           <button className="register-btn"onClick={() => navigate("/register")}>¡REGÍSTRATE AHORA!</button>
         </div>
 
-        <div className="logo">BT</div>
+        <img src={logo} alt="BT" className="logo-bt" />
       </header>
 
       {/* Main Section */}
