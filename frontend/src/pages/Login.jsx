@@ -14,21 +14,21 @@ function Login() {
   const [error, setError] = useState("");
 
   const handleLogin = async () => {
-    setError("");
-    setLoading(true);
+  setError("");
+  setLoading(true);
 
-    try {
-      await login(email, password);
+  try {
+    await login(email, password);
 
-      // Puedes redirigir según rol si quieres después
-      navigate("/dashboard");
+    // Redirigir al HOME
+    navigate("/", { replace: true });
 
-    } catch (err) {
-      setError("Correo o contraseña incorrectos");
-    } finally {
-      setLoading(false);
-    }
-  };
+  } catch (err) {
+    setError("Correo o contraseña incorrectos");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="login-container">
