@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./CalcularIMC.css";
-import logo from "../assets/TB.png"; 
+import logo from "../assets/TB.png";
 
 function CalcularIMC() {
   const navigate = useNavigate();
@@ -11,23 +11,55 @@ function CalcularIMC() {
   const [peso, setPeso] = useState("");
   const [altura, setAltura] = useState("");
   const [resultado, setResultado] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const calcularIMC = () => {
+  const calcularIMC = async () => {
     if (!peso || !altura) {
       alert("Por favor completa peso y altura");
       return;
     }
 
-    const alturaMetros = altura / 100;
-    const imc = (peso / (alturaMetros * alturaMetros)).toFixed(2);
+    try {
+      setLoading(true);
 
-    setResultado(imc);
+      const response = await fetch(
+        "http://localhost:8000/api/usuarios/calcular-imc",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            genero,
+            edad,
+            peso,
+            estatura: altura, // 👈 importante que coincida con Laravel
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error(data);
+        alert("Error al calcular IMC");
+        return;
+      }
+
+      // 🔥 El IMC lo devuelve el backend
+      setResultado(data.imc);
+
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error de conexión con el servidor");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="imc-container">
 
-      {/* HEADER */}
       <div className="header">
         <img src={logo} alt="logo" className="logo" />
         <button
@@ -39,8 +71,6 @@ function CalcularIMC() {
         <img src={logo} alt="logo" className="logo" />
       </div>
 
-
-      {/* CARD */}
       <div className="card">
         <h2>CALCULAR IMC</h2>
 
@@ -72,8 +102,12 @@ function CalcularIMC() {
           onChange={(e) => setAltura(e.target.value)}
         />
 
-        <button className="btn-calcular" onClick={calcularIMC}>
-          CALCULAR
+        <button 
+          className="btn-calcular" 
+          onClick={calcularIMC}
+          disabled={loading}
+        >
+          {loading ? "Calculando..." : "CALCULAR"}
         </button>
 
         {resultado && (

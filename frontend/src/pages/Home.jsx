@@ -11,7 +11,7 @@ const Home = () => {
 
   const handleProtectedNavigation = (path) => {
     if (!user) {
-      navigate("/login");
+      navigate("/register");
       return;
     }
     navigate(path);
