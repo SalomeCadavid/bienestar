@@ -16,12 +16,14 @@
 
 /* HEADER */
 .register-header {
-  width: 100%;
-  background: #e6e6e6;
+  width: 98%;
+  background-color: #ffffff;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 40px;
+  padding: 15px 30px;
+  border-radius: 40px;
+  margin: 15px;
 }
 
 .logo {
@@ -89,6 +91,7 @@
 .login-section p {
   font-size: 12px;
   margin-bottom: 10px;
+  color: black;
 }
 
 .btn-secondary {

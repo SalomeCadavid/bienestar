@@ -6,11 +6,12 @@ import Home from "./pages/Home.jsx";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
-import Tienda from "./pages/tienda"; // 👈 OJO mayúscula
+import Tienda from "./pages/Tienda";
+import CalcularIMC from "./pages/Calcularimc";
+import Planes from "./pages/Planes";
 
 function App() {
   return (
-    
     <AuthProvider>
       <BrowserRouter>
         <Routes>
@@ -19,8 +20,8 @@ function App() {
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/productos" element={<Tienda />} />
 
+          {/* 🔒 Rutas protegidas */}
           <Route
             path="/dashboard"
             element={
@@ -30,7 +31,41 @@ function App() {
             }
           />
 
-          <Route path="/tienda" element={<Tienda />} />
+          <Route
+            path="/productos"
+            element={
+              <ProtectedRoute>
+                <Tienda />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/tienda"
+            element={
+              <ProtectedRoute>
+                <Tienda />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/calcular-imc"
+            element={
+              <ProtectedRoute>
+                <CalcularIMC />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/planes"
+            element={
+              <ProtectedRoute>
+                <Planes />
+              </ProtectedRoute>
+            }
+          />
 
         </Routes>
       </BrowserRouter>
