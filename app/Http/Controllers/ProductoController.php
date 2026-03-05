@@ -21,7 +21,23 @@ class ProductoController extends Controller
             'tipo_producto_id' => 'required|exists:tipo_producto,id'
         ]);
 
-        return Producto::create($request->all());
+        $ruta = null;
+
+        if ($request->hasFile('imagen')) {
+            $ruta = $request->file('imagen')->store('productos', 'public');
+        }
+
+        $producto = Producto::create([
+            'nombre' => $request->nombre,
+            'descripcion' => $request->descripcion,
+            'imagen' => $ruta,
+            'precio' => $request->precio,
+            'categoria' => $request->categoria,
+            'stock' => $request->stock,
+            'tipo_producto_id' => $request->tipo_producto_id,
+        ]);
+
+        return response()->json($producto);
     }
 
     public function show($id)
@@ -31,27 +47,34 @@ class ProductoController extends Controller
 
     public function update(Request $request, $id)
     {
-    $producto = Producto::findOrFail($id);
+        $producto = Producto::findOrFail($id);
 
-    $request->validate([
-        'nombre' => 'sometimes|string|max:100',
-        'precio' => 'sometimes|numeric',
-        'stock' => 'sometimes|integer',
-        'tipo_producto_id' => 'sometimes|exists:tipo_productos,id'
-    ]);
+        $request->validate([
+            'nombre' => 'sometimes|string|max:100',
+            'precio' => 'sometimes|numeric',
+            'stock' => 'sometimes|integer',
+            'tipo_producto_id' => 'sometimes|exists:tipo_producto,id'
+        ]);
 
-    $producto->update($request->all());
+        if ($request->hasFile('imagen')) {
+            $ruta = $request->file('imagen')->store('productos', 'public');
+            $producto->imagen = $ruta;
+        }
 
-    return response()->json([
-        'message' => 'Producto actualizado correctamente',
-        'data' => $producto
-    ]);
+        $producto->update($request->except('imagen'));
+
+        return response()->json([
+            'message' => 'Producto actualizado correctamente',
+            'data' => $producto
+        ]);
     }
-
 
     public function destroy($id)
     {
         Producto::destroy($id);
-        return response()->json(['mensaje' => 'Producto eliminado']);
+
+        return response()->json([
+            'mensaje' => 'Producto eliminado'
+        ]);
     }
 }

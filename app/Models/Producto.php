@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\TipoProducto;
 
 class Producto extends Model
 {
@@ -11,6 +12,7 @@ class Producto extends Model
     protected $fillable = [
         'nombre',
         'descripcion',
+        'imagen',
         'precio',
         'categoria',
         'stock',
@@ -24,7 +26,7 @@ class Producto extends Model
 
     public function tipoProducto()
     {
-    return $this->belongsTo(TipoProducto::class);
+        return $this->belongsTo(TipoProducto::class, 'tipo_producto_id');
     }
 
     public function detalles()
