@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->integer('stock')->default(0);
 
             $table->unsignedBigInteger('tipo_producto_id');
-
+            $table->integer('duracion_dias')->nullable()->after('precio');
             $table->timestamps();
 
             $table->foreign('tipo_producto_id')
