@@ -13,14 +13,10 @@ class RolesSeeder extends Seeder
             [
                 'id' => 1,
                 'nombre' => 'admin',
-                'created_at' => now(),
-                'updated_at' => now()
             ],
             [
                 'id' => 2,
                 'nombre' => 'usuario',
-                'created_at' => now(),
-                'updated_at' => now()
             ]
         ]);
     }
