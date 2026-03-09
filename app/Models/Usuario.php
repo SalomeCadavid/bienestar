@@ -42,7 +42,7 @@ class Usuario extends Model
 
     public function facturas()
     {
-    return $this->hasMany(Factura::class);
+        return $this->hasMany(Factura::class);
     }
 
     public function recomendaciones()

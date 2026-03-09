@@ -21,12 +21,32 @@ class ProductoController extends Controller
             'tipo_producto_id' => 'required|exists:tipo_producto,id'
         ]);
 
+<<<<<<< HEAD
         $producto = Producto::create($request->all());
 
         return response()->json([
             'message' => 'Producto creado correctamente',
             'data' => $producto
         ], 201);
+=======
+        $ruta = null;
+
+        if ($request->hasFile('imagen')) {
+            $ruta = $request->file('imagen')->store('productos', 'public');
+        }
+
+        $producto = Producto::create([
+            'nombre' => $request->nombre,
+            'descripcion' => $request->descripcion,
+            'imagen' => $ruta,
+            'precio' => $request->precio,
+            'categoria' => $request->categoria,
+            'stock' => $request->stock,
+            'tipo_producto_id' => $request->tipo_producto_id,
+        ]);
+
+        return response()->json($producto);
+>>>>>>> b6b4d5e451b129a80554eeeddc511c1691b2a088
     }
 
     public function show($id)
@@ -45,14 +65,25 @@ class ProductoController extends Controller
             'tipo_producto_id' => 'sometimes|exists:tipo_producto,id'
         ]);
 
+<<<<<<< HEAD
         $producto->update($request->all());
 
+=======
+        if ($request->hasFile('imagen')) {
+            $ruta = $request->file('imagen')->store('productos', 'public');
+            $producto->imagen = $ruta;
+        }
+
+        $producto->update($request->except('imagen'));
+
+>>>>>>> b6b4d5e451b129a80554eeeddc511c1691b2a088
         return response()->json([
             'message' => 'Producto actualizado correctamente',
             'data' => $producto
         ]);
     }
 
+<<<<<<< HEAD
 public function destroy($id)
 {
     try {
@@ -71,4 +102,14 @@ public function destroy($id)
 
     }
 }
+=======
+    public function destroy($id)
+    {
+        Producto::destroy($id);
+
+        return response()->json([
+            'mensaje' => 'Producto eliminado'
+        ]);
+    }
+>>>>>>> b6b4d5e451b129a80554eeeddc511c1691b2a088
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\RecomendacionSemanalController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FacturaController;
+use App\Http\Controllers\OrdenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +17,11 @@ use App\Http\Controllers\FacturaController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/usuarios/calcular-imc', [UsuarioController::class, 'calcularImc']);
+
+// 🔥 PRODUCTOS PUBLICOS (IMPORTANTE)
+Route::get('/productos', [ProductoController::class,'index']);
+Route::get('/productos/{id}', [ProductoController::class,'show']);
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +31,6 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
 
-    // Logout general
     Route::post('/logout', [AuthController::class, 'logout']);
 
     /*
@@ -34,9 +39,13 @@ Route::middleware('auth:sanctum')->group(function () {
     |--------------------------------------------------------------------------
     */
     Route::middleware('role:admin')->group(function () {
+
         Route::apiResource('usuarios', UsuarioController::class);
         Route::apiResource('tipo-productos', TipoProductoController::class);
-        Route::apiResource('productos', ProductoController::class);
+
+        Route::post('/productos', [ProductoController::class,'store']);
+        Route::put('/productos/{id}', [ProductoController::class,'update']);
+        Route::delete('/productos/{id}', [ProductoController::class,'destroy']);
     });
 
     /*
@@ -45,8 +54,9 @@ Route::middleware('auth:sanctum')->group(function () {
     |--------------------------------------------------------------------------
     */
     Route::middleware('role:cliente,admin')->group(function () {
+
         Route::apiResource('recomendaciones', RecomendacionSemanalController::class);
-        Route::apiResource('facturas', FacturaController::class)->only(['index', 'store', 'show']);
+        Route::apiResource('facturas', FacturaController::class)->only(['index','store','show']);
     });
 
 });
