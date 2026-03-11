@@ -21,14 +21,6 @@ class ProductoController extends Controller
             'tipo_producto_id' => 'required|exists:tipo_producto,id'
         ]);
 
-<<<<<<< HEAD
-        $producto = Producto::create($request->all());
-
-        return response()->json([
-            'message' => 'Producto creado correctamente',
-            'data' => $producto
-        ], 201);
-=======
         $ruta = null;
 
         if ($request->hasFile('imagen')) {
@@ -45,8 +37,10 @@ class ProductoController extends Controller
             'tipo_producto_id' => $request->tipo_producto_id,
         ]);
 
-        return response()->json($producto);
->>>>>>> b6b4d5e451b129a80554eeeddc511c1691b2a088
+        return response()->json([
+            'message' => 'Producto creado correctamente',
+            'data' => $producto
+        ], 201);
     }
 
     public function show($id)
@@ -65,10 +59,6 @@ class ProductoController extends Controller
             'tipo_producto_id' => 'sometimes|exists:tipo_producto,id'
         ]);
 
-<<<<<<< HEAD
-        $producto->update($request->all());
-
-=======
         if ($request->hasFile('imagen')) {
             $ruta = $request->file('imagen')->store('productos', 'public');
             $producto->imagen = $ruta;
@@ -76,40 +66,28 @@ class ProductoController extends Controller
 
         $producto->update($request->except('imagen'));
 
->>>>>>> b6b4d5e451b129a80554eeeddc511c1691b2a088
         return response()->json([
             'message' => 'Producto actualizado correctamente',
             'data' => $producto
         ]);
     }
 
-<<<<<<< HEAD
-public function destroy($id)
-{
-    try {
-        $producto = Producto::findOrFail($id);
-        $producto->delete();
-
-        return response()->json([
-            "message" => "Producto eliminado"
-        ]);
-
-    } catch (\Illuminate\Database\QueryException $e) {
-
-        return response()->json([
-            "error" => "No se puede eliminar el producto porque tiene ventas registradas"
-        ], 400);
-
-    }
-}
-=======
     public function destroy($id)
     {
-        Producto::destroy($id);
+        try {
+            $producto = Producto::findOrFail($id);
+            $producto->delete();
 
-        return response()->json([
-            'mensaje' => 'Producto eliminado'
-        ]);
+            return response()->json([
+                "message" => "Producto eliminado"
+            ]);
+
+        } catch (\Illuminate\Database\QueryException $e) {
+
+            return response()->json([
+                "error" => "No se puede eliminar el producto porque tiene ventas registradas"
+            ], 400);
+
+        }
     }
->>>>>>> b6b4d5e451b129a80554eeeddc511c1691b2a088
 }
