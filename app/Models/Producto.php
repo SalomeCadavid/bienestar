@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\TipoProducto;
+use App\Models\Detalle_Factura;
 
 class Producto extends Model
 {

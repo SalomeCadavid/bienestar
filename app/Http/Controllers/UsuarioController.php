@@ -43,7 +43,10 @@ class UsuarioController extends Controller
             'rol_id' => $request->rol_id
         ]);
 
-        return response()->json($usuario, 201);
+        return response()->json([
+            "message" => "Usuario creado correctamente",
+            "data" => $usuario
+        ], 201);
     }
 
     public function show($id)
@@ -54,6 +57,14 @@ class UsuarioController extends Controller
     public function update(Request $request, $id)
     {
         $usuario = Usuario::findOrFail($id);
+
+        $request->validate([
+            'nombre' => 'sometimes|string|max:100',
+            'email' => 'sometimes|email|unique:usuarios,email,' . $id,
+            'peso' => 'nullable|numeric',
+            'estatura' => 'nullable|numeric',
+            'rol_id' => 'sometimes|exists:roles,id'
+        ]);
 
         $datos = $request->except('password');
 
@@ -72,47 +83,52 @@ class UsuarioController extends Controller
             $usuario->save();
         }
 
-        return $usuario;
+        return response()->json([
+            "message" => "Usuario actualizado",
+            "data" => $usuario
+        ]);
     }
 
     public function destroy($id)
     {
         Usuario::destroy($id);
-        return response()->json(['mensaje' => 'Usuario eliminado']);
+
+        return response()->json([
+            'mensaje' => 'Usuario eliminado'
+        ]);
     }
 
     public function calcularImc(Request $request)
-{
-    $request->validate([
-        'peso' => 'required|numeric',
-        'estatura' => 'required|numeric',
-        'genero' => 'nullable|string',
-        'edad' => 'nullable|integer'
-    ]);
+    {
+        $request->validate([
+            'peso' => 'required|numeric',
+            'estatura' => 'required|numeric',
+            'genero' => 'nullable|string',
+            'edad' => 'nullable|integer'
+        ]);
 
-    $alturaMetros = $request->estatura / 100;
-    $imc = $request->peso / ($alturaMetros * $alturaMetros);
-    $imc = round($imc, 2);
+        $alturaMetros = $request->estatura / 100;
+        $imc = $request->peso / ($alturaMetros * $alturaMetros);
+        $imc = round($imc, 2);
 
-    if ($imc < 18.5) {
-        $clasificacion = "Bajo peso";
-        $plan = "Plan de aumento de masa muscular";
-    } elseif ($imc >= 18.5 && $imc < 25) {
-        $clasificacion = "Normal";
-        $plan = "Plan de mantenimiento";
-    } elseif ($imc >= 25 && $imc < 30) {
-        $clasificacion = "Sobrepeso";
-        $plan = "Plan de pérdida de grasa";
-    } else {
-        $clasificacion = "Obesidad";
-        $plan = "Plan intensivo";
+        if ($imc < 18.5) {
+            $clasificacion = "Bajo peso";
+            $plan = "Plan de aumento de masa muscular";
+        } elseif ($imc >= 18.5 && $imc < 25) {
+            $clasificacion = "Normal";
+            $plan = "Plan de mantenimiento";
+        } elseif ($imc >= 25 && $imc < 30) {
+            $clasificacion = "Sobrepeso";
+            $plan = "Plan de pérdida de grasa";
+        } else {
+            $clasificacion = "Obesidad";
+            $plan = "Plan intensivo";
+        }
+
+        return response()->json([
+            'imc' => $imc,
+            'clasificacion' => $clasificacion,
+            'plan_recomendado' => $plan
+        ]);
     }
-
-    return response()->json([
-        'imc' => $imc,
-        'clasificacion' => $clasificacion,
-        'plan_recomendado' => $plan
-    ]);
-}
-    
 }
