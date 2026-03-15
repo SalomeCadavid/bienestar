@@ -36,8 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::post('/usuarios/calcular-imc', [UsuarioController::class, 'calcularIMC']);
-
+    Route::post('/usuarios/calcular-imc', [UsuarioController::class, 'calcularImc']);
     /*
     |--------------------------------------------------------------------------
     | USUARIO AUTENTICADO
