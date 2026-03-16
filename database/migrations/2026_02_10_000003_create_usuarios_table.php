@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->string('password');
             $table->integer('edad')->nullable();
             $table->decimal('peso', 5, 2)->nullable();
-            $table->decimal('estatura', 4, 2)->nullable();
+            $table->decimal('estatura', 5, 2)->nullable(); // permite hasta 999.99 cm
             $table->enum('genero', ['M', 'F', 'O'])->nullable();
             $table->decimal('imc', 4, 2)->nullable();
             $table->unsignedBigInteger('plan_id')->nullable();

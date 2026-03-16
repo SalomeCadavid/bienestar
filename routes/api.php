@@ -57,40 +57,35 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::put('/perfil', function (Request $request) {
 
-        $request->validate([
-            'genero' => 'nullable|string|max:10',
-            'edad' => 'nullable|integer|min:1|max:120',
-            'peso' => 'nullable|numeric|min:1',
-            'estatura' => 'nullable|numeric|min:1'
-        ]);
+    $request->validate([
+        'genero'   => 'nullable|in:M,F,O',        // ✅ solo acepta valores del enum
+        'edad'     => 'nullable|integer|min:1|max:120',
+        'peso'     => 'nullable|numeric|min:1',
+        'estatura' => 'nullable|numeric|min:1'
+    ]);
 
-        $user = $request->user();
+    $user = $request->user();
 
-        $imc = null;
+    $imc = null;
 
-        if ($request->peso && $request->estatura) {
+    if ($request->peso && $request->estatura) {
+        $alturaMetros = $request->estatura / 100;
+        $imc = round($request->peso / ($alturaMetros * $alturaMetros), 2);
+    }
 
-            $alturaMetros = $request->estatura / 100;
+    $user->update([
+        'genero'   => $request->genero,
+        'edad'     => $request->edad,
+        'peso'     => $request->peso,
+        'estatura' => $request->estatura / 100, // ✅ convierte 170cm → 1.70m
+        'imc'      => $imc
+    ]);
 
-            $imc = round(
-                $request->peso / ($alturaMetros * $alturaMetros),
-                2
-            );
-        }
-
-        $user->update([
-            'genero' => $request->genero,
-            'edad' => $request->edad,
-            'peso' => $request->peso,
-            'estatura' => $request->estatura,
-            'imc' => $imc
-        ]);
-
-        return response()->json([
-            "message" => "Perfil actualizado correctamente",
-            "data" => $user->load('role')
-        ]);
-    });
+    return response()->json([
+        "message" => "Perfil actualizado correctamente",
+        "data"    => $user->load('role')
+    ]);
+});
 
     /*
     |--------------------------------------------------------------------------
