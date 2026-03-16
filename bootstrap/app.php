@@ -13,22 +13,23 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
         api: __DIR__.'/../routes/api.php',
     )
-    ->withExceptions(function ($exceptions) {
-    $exceptions->render(function (AuthenticationException $e, Request $request) {
-        return response()->json([
-            'message' => 'No autenticado.'
-        ], 401);
-    });
-})
     ->withMiddleware(function (Middleware $middleware): void {
+
+        // ✅ CORS habilitado globalmente
+        $middleware->prepend(\Illuminate\Http\Middleware\HandleCors::class);
+
         $middleware->alias([
-        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
-        'role' => \App\Http\Middleware\RoleMiddleware::class,
-        'admin' => \App\Http\Middleware\AdminMiddleware::class,
-    ]);
+            'auth'  => \Illuminate\Auth\Middleware\Authenticate::class,
+            'role'  => \App\Http\Middleware\RoleMiddleware::class,
+            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
-    })->create();
 
-    
+        $exceptions->render(function (AuthenticationException $e, Request $request) {
+            return response()->json([
+                'message' => 'No autenticado.'
+            ], 401);
+        });
+
+    })->create();
