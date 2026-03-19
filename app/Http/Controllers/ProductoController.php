@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Producto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductoController extends Controller
 {
@@ -15,17 +16,24 @@ class ProductoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required|string|max:100',
-            'precio' => 'required|numeric',
-            'stock' => 'required|integer',
-            'tipo_producto_id' => 'required|exists:tipo_producto,id'
+            'nombre'           => 'required|string|max:100',
+            'precio'           => 'required|numeric',
+            'stock'            => 'required|integer',
+            'tipo_producto_id' => 'required|exists:tipo_producto,id',
+            'imagen'           => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
-        $producto = Producto::create($request->all());
+        $datos = $request->except('imagen');
+
+        if ($request->hasFile('imagen')) {
+            $datos['imagen'] = $request->file('imagen')->store('productos', 'public');
+        }
+
+        $producto = Producto::create($datos);
 
         return response()->json([
             'message' => 'Producto creado correctamente',
-            'data' => $producto
+            'data'    => $producto
         ], 201);
     }
 
@@ -39,36 +47,50 @@ class ProductoController extends Controller
         $producto = Producto::findOrFail($id);
 
         $request->validate([
-            'nombre' => 'sometimes|string|max:100',
-            'precio' => 'sometimes|numeric',
-            'stock' => 'sometimes|integer',
-            'tipo_producto_id' => 'sometimes|exists:tipo_producto,id'
+            'nombre'           => 'sometimes|string|max:100',
+            'precio'           => 'sometimes|numeric',
+            'stock'            => 'sometimes|integer',
+            'tipo_producto_id' => 'sometimes|exists:tipo_producto,id',
+            'imagen'           => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
-        $producto->update($request->all());
+        $datos = $request->except('imagen');
+
+        if ($request->hasFile('imagen')) {
+            // Elimina la imagen anterior si existe
+            if ($producto->imagen) {
+                Storage::disk('public')->delete($producto->imagen);
+            }
+            $datos['imagen'] = $request->file('imagen')->store('productos', 'public');
+        }
+
+        $producto->update($datos);
 
         return response()->json([
             'message' => 'Producto actualizado correctamente',
-            'data' => $producto
+            'data'    => $producto
         ]);
     }
 
-public function destroy($id)
-{
-    try {
-        $producto = Producto::findOrFail($id);
-        $producto->delete();
+    public function destroy($id)
+    {
+        try {
+            $producto = Producto::findOrFail($id);
 
-        return response()->json([
-            "message" => "Producto eliminado"
-        ]);
+            if ($producto->imagen) {
+                Storage::disk('public')->delete($producto->imagen);
+            }
 
-    } catch (\Illuminate\Database\QueryException $e) {
+            $producto->delete();
 
-        return response()->json([
-            "error" => "No se puede eliminar el producto porque tiene ventas registradas"
-        ], 400);
+            return response()->json([
+                'message' => 'Producto eliminado'
+            ]);
 
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'error' => 'No se puede eliminar el producto porque tiene ventas registradas'
+            ], 400);
+        }
     }
-}
 }
